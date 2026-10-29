@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+ </head>
+ <body>
+<div class="jukebox">
+      <h1>Dustline saloon jukebox</h1>
+  <p class="subtitle"> pick a Tune , queu it up , and enjoy the wild West vibes!</p>
+<div class="now-playing">
+    <span class="badge">NOW PLAYING</span>
+<h2 id="current-title"> no track playin Add a song to the queue !</h2>
+<p id="current-time">0:00 / 0:00</p> 
+<progress id="progress-bar" value="0" max="100"></progress>
+<audio id="audio-player"></audio>
+</div>
+
+<div class="controls">
+    <button onclick="playAudio()">▶ play</button>
+    <button onclick="pauseAudio()">⏸ pause</button>
+    <button onclick="skipTrack()">⏭ skip</button>
+    <button onclick="clearQueue()">🗑 Clear queue</button>
+<div class="volume-box">
+    <label for="volume-slider">🔊 Volume</label>
+    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.8" oninput="changeVolume()">
+    <span id="volume-value">80%</span>
+</div>
+
+</div>
+<hr>
+
+<div class="search-box">
+    <h3>🔍 search the saloon library</h3>
+<input type="text" id="search-input" placeholder="type song name to filter..."onkeyup="searchTracks()">
+</div>
+
+<div class="request-box">
+    <h3> ➕ Request a new track </h3>
+    <input type="text" id="new-title" placeholder="song title (e.g cowboy blues)">
+<input type="text" id="new-url" placeholder="Direct Mp3 link  (https://...)">
+<button onclick="requestSong()">Add to Library</button>
+</div>
+
+<hr>
+
+<div class="library">
+    <h3> 🎵 saloon song queue</h3>
+    <ul id="library-list"></ul>
+
+</div>
+<div class="queue">
+    <h3>📜 up next in Queue (<span id="queue-count">0</span>) </h3>
+    <ul id="queue-list"></ul>
+</div>
+
+<footer>
+    <p> Built by ahmed for hack Club pixel</p>
+</footer>
+</div>
+<script src="script.js"></script>
+
+
+
+ </body>
+ </html>
