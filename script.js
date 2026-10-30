@@ -34,9 +34,17 @@ function renderLibrary(filter = "") {
     });
 }
 function addToQueue(index) {
-    queue.push(songs[index])
+    queue.push(songs[index]);
     updateQueueUI();
-    if (player.paused && !player.src) {
+    if (player.paused) {
+        playNext();
+    }
+}
+
+function playAudio() {
+    if (player.src && player.src !== window.location.href) {
+        player.play();
+    } else if (queue.length > 0) {
         playNext();
     }
 }
@@ -65,5 +73,74 @@ queue.forEach((song, i) => {
             queueList.appendChild(li);
 });
 }
+function playNext(){
+    if (queue.length > 0){
+        const nextSong = queue.shift();
+        player.src = nextSong.url;
+       currentTitle.innerText = `${nextSong.title} - ${nextSong.artist}`;
+        player.play();
+        updateQueueUI();
+    }else{
+        player.src = "";
+        currentTitle.innerText = "Queue finished! pick another song.";
+        progressBar.value = 0;
+        currentTimeText.innerText = "0:00 / 0:00"
+    }
+}
+function pauseAudio() {
+    player.pause();
+}
+
+function skipTrack() {
+    playNext();
+}
+
+function changeVolume() {
+    const slider = document.getElementById("volume-slider");
+    const volumeValue = document.getElementById("volume-value");
+    player.volume = slider.value;
+    volumeValue.innerText = Math.round(slider.value * 100) + "%";
+}
+
+function searchTracks() {
+    const text = document.getElementById("search-input").value;
+    renderLibrary(text);
+}
+
+function requestSong() {
+    const titleInput = document.getElementById("new-title");
+    const urlInput = document.getElementById("new-url");
+    if (titleInput.value.trim() !== "" && urlInput.value.trim() !== "") {
+        songs.push({
+            title: titleInput.value.trim(),
+            artist: "Saloon Guest Request",
+            url: urlInput.value.trim()
+        });
+        renderLibrary();
+        titleInput.value = "";
+        urlInput.value = "";
+        alert("Song added to the Saloon Library!");
+    } else {
+        alert("Please enter both a song title and a valid MP3 link!");
+    }
+}
+
+function formatTime(seconds) {
+    if (isNaN(seconds)) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+}
+
+player.addEventListener("timeupdate", () => {
+    if (player.duration) {
+        const percent = (player.currentTime / player.duration) * 100;
+        progressBar.value = percent;
+        currentTimeText.innerText = `${formatTime(player.currentTime)} / ${formatTime(player.duration)}`;
+    }
+});
+
+player.addEventListener("ended", playNext);
+
 renderLibrary();
 updateQueueUI();
