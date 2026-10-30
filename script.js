@@ -65,3 +65,5 @@ queue.forEach((song, i) => {
             queueList.appendChild(li);
 });
 }
+renderLibrary();
+updateQueueUI();
